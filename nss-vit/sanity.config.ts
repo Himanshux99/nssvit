@@ -89,6 +89,41 @@ export default defineConfig({
             S.documentTypeListItem('teamMember').title('Team Members'),
             S.documentTypeListItem('volunteerGroup').title('Volunteer Groups'),
             S.documentTypeListItem('event').title('Events'),
+
+            // New Events Dashboard
+            S.listItem()
+              .title('Events Dashboard')
+              .icon(() => '📅')
+              .child(
+                S.list()
+                  .title('Events Dashboard')
+                  .items([
+                    S.listItem()
+                      .title('Events Page Settings')
+                      .icon(() => '🖼️')
+                      .child(S.document().schemaType('eventsPage').documentId('eventsPage')),
+                    S.divider(),
+                    S.listItem()
+                      .title('Upcoming Events')
+                      .icon(() => '✨')
+                      .child(
+                        S.documentList()
+                          .title('Upcoming Events')
+                          .schemaType('eventEntry')
+                          .filter('_type == "eventEntry" && isUpcoming == true')
+                      ),
+                    S.listItem()
+                      .title('Past Events')
+                      .icon(() => '⏪')
+                      .child(
+                        S.documentList()
+                          .title('Past Events')
+                          .schemaType('eventEntry')
+                          .filter('_type == "eventEntry" && isUpcoming != true')
+                      ),
+                  ])
+              ),
+
             S.documentTypeListItem('camp').title('Special Camps'),
             S.documentTypeListItem('achievement').title('Achievements'),
             S.documentTypeListItem('galleryImage').title('Gallery'),
@@ -136,10 +171,10 @@ export default defineConfig({
           showCreateButton: true,
         }),
 
-        // Recent Events
+        // Recent Events (both legacy and new dashboard entries)
         documentListWidget({
           title: 'Recent Events',
-          types: ['event'],
+          types: ['eventEntry', 'event'],
           order: '_updatedAt desc',
           limit: 5,
           showCreateButton: true,

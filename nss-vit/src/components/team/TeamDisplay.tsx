@@ -93,6 +93,7 @@ const positionOrder = [
   
   'Publicity Co-ordinator',
   'Publicity Coordinator',
+  'Documentation Coordinator',
 
 ];
 

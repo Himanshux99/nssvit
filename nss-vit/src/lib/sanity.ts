@@ -8,7 +8,7 @@
  */
 
 import { createImageUrlBuilder } from '@sanity/image-url';
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import type { SanityImageSource } from '@sanity/image-url';
 
 // NSS VIT Sanity Project
 const PROJECT_ID = 'o3z0h95j';
@@ -269,6 +269,90 @@ export interface Event extends SanityDocument {
   isUpcoming: boolean;
 }
 
+export interface LocationDetails {
+  venue: string;
+  city?: string;
+  state?: string;
+  googleMapsLink?: string;
+}
+
+export interface RegistrationDetails {
+  registrationUrl?: string;
+  registrationDeadline?: string;
+  maxParticipants?: number;
+}
+
+export interface MetricItem {
+  label: string;
+  value: string;
+  note?: string;
+}
+
+export interface ImpactStats {
+  beneficiariesCount?: number;
+  volunteersCount?: number;
+  hoursOfService?: number;
+  fundsRaised?: number;
+  itemsDistributed?: number;
+  additionalMetrics?: MetricItem[];
+}
+
+export interface TimelineItem {
+  title: string;
+  time: string;
+  description: string;
+}
+
+export interface TestimonialItem {
+  personName: string;
+  role?: string;
+  image?: SanityImage;
+  quote: string;
+}
+
+export interface SEODetails {
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string[];
+}
+
+export interface GalleryItem {
+  image: SanityImage;
+  caption?: string;
+}
+
+export interface EventEntry extends SanityDocument {
+  _type: 'eventEntry';
+  title: string;
+  slug: { current: string };
+  shortDescription: string;
+  description: any[]; // Portable Text array
+  category: EventCategory;
+  tags?: string[];
+  coverImage: SanityImage;
+  gallery?: GalleryItem[];
+  eventDate: string;
+  isCancelled: boolean;
+  location?: LocationDetails;
+  registration?: RegistrationDetails;
+  impact?: ImpactStats;
+  timeline?: TimelineItem[];
+  testimonials?: TestimonialItem[];
+  featured: boolean;
+  seo?: SEODetails;
+  status?: 'cancelled' | 'upcoming' | 'completed';
+}
+
+export interface EventsPage extends SanityDocument {
+  _type: 'eventsPage';
+  heroTitle: string;
+  heroSubtitle?: string;
+  heroImage: SanityImage;
+  ctaText?: string;
+  ctaLink?: string;
+  seo?: SEODetails;
+}
+
 export interface Benefit {
   title: string;
   description?: string;
@@ -463,9 +547,121 @@ export const queries = {
   // Developers
   developers: `*[_type == "developer"] | order(order asc)`,
 
-  // Upcoming events
+  // Upcoming events (legacy event schema — kept for backward compat)
   upcomingEvents: `*[_type == "event" && isUpcoming == true && eventDate > now()] | order(eventDate asc)[0...5] {
     ...,
     category->
   }`,
+
+  // ─── eventEntry ────────────────────────────────────────────────────────────
+  // All queries for the new eventEntry document type are grouped here.
+  // Usage:  sanityClient.fetch(queries.eventEntry.upcoming)
+  //         sanityClient.fetch(queries.eventEntry.bySlug('my-slug'))
+  // ──────────────────────────────────────────────────────────────────────────
+  eventEntry: {
+
+    /** Events page singleton — hero title, subtitle, hero image, CTA, SEO + analytics settings */
+    page: `*[_type == "eventsPage"][0] {
+      heroTitle,
+      heroSubtitle,
+      heroImage,
+      ctaText,
+      ctaLink,
+      seo,
+      analyticsDataSource,
+      "manualStats": manualStats {
+        totalEventsCompleted,
+        totalHoursCompleted,
+        totalBeneficiaries,
+        "categoryStats": categoryStats[] {
+          "categoryId": category->_id,
+          "categoryName": category->name,
+          "categorySlug": category->slug.current,
+          "categoryColor": category->color,
+          eventsCount,
+          hoursCount
+        }
+      }
+    }`,
+
+    /** Upcoming: isUpcoming == true */
+    upcoming: `*[_type == "eventEntry" && isUpcoming == true] | order(eventDate asc) {
+      _id, title,
+      "slug": slug.current,
+      shortDescription, description, coverImage,
+      eventDate, featured, isCancelled,
+      "status": select(isCancelled == true => "cancelled", "upcoming"),
+      category->{ _id, name, "slug": slug.current, color },
+      tags, location,
+      "registration": registration { registrationUrl },
+      "impact": impact { beneficiariesCount, volunteersCount, hoursOfService }
+    }`,
+
+    /** Ongoing: (Not used now, returns empty) */
+    ongoing: `*[_type == "eventEntry" && false]`,
+
+    /** Past: isUpcoming == false */
+    past: `*[_type == "eventEntry" && isUpcoming != true] | order(eventDate desc) {
+      _id, title,
+      "slug": slug.current,
+      shortDescription, description, coverImage,
+      eventDate, featured, isCancelled,
+      "status": select(isCancelled == true => "cancelled", "completed"),
+      category->{ _id, name, "slug": slug.current, color },
+      tags, location,
+      "impact": impact { beneficiariesCount, volunteersCount, hoursOfService }
+    }`,
+
+    /** Featured: featured == true */
+    featured: `*[_type == "eventEntry" && featured == true] | order(eventDate asc) {
+      _id, title,
+      "slug": slug.current,
+      shortDescription, description, coverImage,
+      eventDate, featured, isCancelled,
+      "status": select(
+        isCancelled == true => "cancelled",
+        isUpcoming == true => "upcoming",
+        "completed"
+      ),
+      category->{ _id, name, "slug": slug.current, color },
+      tags, location,
+      "registration": registration { registrationUrl },
+      "impact": impact { beneficiariesCount, volunteersCount, hoursOfService }
+    }`,
+
+    /** All events ordered newest first */
+    all: `*[_type == "eventEntry"] | order(eventDate desc) {
+      _id, title,
+      "slug": slug.current,
+      shortDescription, description, coverImage,
+      eventDate, featured, isCancelled,
+      "status": select(
+        isCancelled == true => "cancelled",
+        isUpcoming == true => "upcoming",
+        "completed"
+      ),
+      category->{ _id, name, "slug": slug.current, color },
+      tags,
+      "impact": impact { beneficiariesCount, volunteersCount, hoursOfService }
+    }`,
+
+    /** Single event detail by slug */
+    bySlug: (slug: string) => `*[_type == "eventEntry" && slug.current == "${slug}"][0] {
+      _id, title,
+      "slug": slug.current,
+      shortDescription, coverImage,
+      eventDate, featured, isCancelled,
+      "status": select(
+        isCancelled == true => "cancelled",
+        isUpcoming == true => "upcoming",
+        "completed"
+      ),
+      category->{ _id, name, "slug": slug.current, color },
+      tags, location,
+      description, gallery,
+      registration, impact,
+      timeline, testimonials, seo
+    }`,
+  },
 };
+

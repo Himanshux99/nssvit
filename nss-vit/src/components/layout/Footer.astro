@@ -60,6 +60,7 @@ const vitLogo = siteConfig?.vitLogo || '/favicon.svg';
 const defaultNavLinks = [
   { name: 'About', href: '/#about' },
   { name: 'Events', href: '/events' },
+  {name: 'Our Work',href:'/our-work'},
   { name: 'Team', href: '/team' },
   { name: 'Gallery', href: '/gallery' },
   { name: 'Camp', href: '/camp' },
@@ -124,7 +125,7 @@ const contactNumbers = footerContent?.contactNumbers || [];
       <div class="col-span-1 md:col-span-2">
         <span class="text-label text-swiss-gray-400 mb-3 block">Links</span>
         <ul class="space-y-1.5">
-          {navLinks.slice(0, 3).map((link: { name: string; href: string }) => (
+          {navLinks.slice(0, 4).map((link: { name: string; href: string }) => (
             <li><a href={link.href} class="text-caption text-swiss-gray-600 hover:text-primary transition-colors text-xs">{link.name}</a></li>
           ))}
         </ul>
@@ -133,7 +134,7 @@ const contactNumbers = footerContent?.contactNumbers || [];
       <div class="col-span-1 md:col-span-2">
         <span class="text-label text-swiss-gray-400 mb-3 block invisible">More</span>
         <ul class="space-y-1.5">
-          {navLinks.slice(3).map((link: { name: string; href: string }) => (
+          {navLinks.slice(4).map((link: { name: string; href: string }) => (
             <li><a href={link.href} class="text-caption text-swiss-gray-600 hover:text-primary transition-colors text-xs">{link.name}</a></li>
           ))}
         </ul>
