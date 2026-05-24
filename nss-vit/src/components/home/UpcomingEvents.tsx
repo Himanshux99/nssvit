@@ -177,7 +177,7 @@ export default function UpcomingEvents({ events, maxEvents = 3 }: UpcomingEvents
                     </a>
                   )}
                   <a
-                    href={`/events#${event.slug?.current || event._id}`}
+                    href={`/Our-Work#${event.slug || event._id}`}
                     className="px-4 py-2 text-sm font-medium text-swiss-gray-700 dark:text-swiss-gray-300 hover:bg-swiss-gray-100 dark:hover:bg-swiss-gray-800 rounded-lg transition-colors"
                   >
                     Details
@@ -191,7 +191,7 @@ export default function UpcomingEvents({ events, maxEvents = 3 }: UpcomingEvents
         {/* View All Events Link */}
         <div className="text-center mt-8">
           <a
-            href="/events"
+            href="/Our-Work"
             className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium transition-colors"
           >
             View All Events

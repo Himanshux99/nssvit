@@ -30,6 +30,7 @@ interface Props {
 const defaultNavLinks: NavLink[] = [
   { name: 'Home', href: '/' },
   { name: 'Events', href: '/events' },
+  { name: 'Our Work', href: '/our-work' },
   { name: 'Team', href: '/team' },
   { name: 'Gallery', href: '/gallery' },
   { name: 'Camp', href: '/camp' },
