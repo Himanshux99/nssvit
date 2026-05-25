@@ -66,8 +66,9 @@ const ChartTooltipContent = React.forwardRef<
     label?: string
     hideLabel?: boolean
     formatter?: (value: any, name: any) => React.ReactNode
-  } & React.HTMLAttributes<HTMLDivElement>
->(({ active, payload, label, hideLabel = false, formatter, className, ...props }, ref) => {
+    className?: string
+  }
+>(({ active, payload, label, hideLabel = false, formatter, className }, ref) => {
   if (!active || !payload?.length) {
     return null
   }
@@ -79,7 +80,6 @@ const ChartTooltipContent = React.forwardRef<
         "rounded-md border border-swiss-gray-200 bg-white p-2.5 shadow-sm text-xs min-w-[120px] text-text",
         className
       )}
-      {...props}
     >
       {!hideLabel && <div className="font-bold mb-1">{label}</div>}
       <div className="space-y-1.5">
@@ -90,7 +90,10 @@ const ChartTooltipContent = React.forwardRef<
           return (
             <div key={idx} className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
+                <span
+                  className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: color }}
+                />
                 <span className="text-swiss-gray-500 font-medium">{name}</span>
               </div>
               <span className="font-bold">{value}</span>
