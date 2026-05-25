@@ -55,15 +55,12 @@ export default function EventCalendar({
   }
 
   // Trailing days to complete rows
+  let trailingDay = 1;
   while (calendarCells.length % 7 !== 0) {
     const d = new Date(lastOfMonth);
-    d.setDate(
-      lastOfMonth.getDate() +
-        (calendarCells.length % 7 === 0
-          ? 0
-          : 7 - (calendarCells.length % 7)),
-    );
+    d.setDate(lastOfMonth.getDate() + trailingDay);
     calendarCells.push({ date: d, inMonth: false });
+    trailingDay += 1;
   }
 
   const allUpcoming = upcomingEvents;
