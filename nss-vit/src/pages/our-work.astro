@@ -34,12 +34,18 @@ const [eventsPageContent, upcomingEvents, ongoingEvents, pastEvents, categories]
 const testimonialRaw = await sanityClient.fetch(`
   *[_type == "eventEntry" && isUpcoming != true && defined(testimonials) && count(testimonials) > 0]
   | order(eventDate desc)[0...5] {
+    title,
     "testimonials": testimonials[] { personName, role, image, quote }
   }
 `);
 
 const testimonials = testimonialRaw
-  .flatMap((e: any) => e.testimonials ?? [])
+  .flatMap((e: any) =>
+    (e.testimonials ?? []).map((t: any) => ({
+      ...t,
+      title: e.title,
+    })),
+  )
   .slice(0, 8);
 
 // ── SEO ───────────────────────────────────────────────────────────────────────
