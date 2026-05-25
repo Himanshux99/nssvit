@@ -1,0 +1,68 @@
+---
+/**
+ * ╻ NSS-VIT
+ * ┃ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * ┃ Not Me, But You
+ * ┃
+ * ┃ Our-Work.astro
+ * ╹ src/pages/
+ */
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { EventsPage } from '../components/events';
+import { sanityClient } from 'sanity:client';
+import { queries } from '../lib/sanity';
+
+// ── Fetch all event data in parallel ──────────────────────────────────────────
+const [eventsPageContent, upcomingEvents, ongoingEvents, pastEvents, categories] =
+  await Promise.all([
+    sanityClient.fetch(queries.eventEntry.page),
+    sanityClient.fetch(queries.eventEntry.upcoming),
+    sanityClient.fetch(queries.eventEntry.ongoing),
+    sanityClient.fetch(queries.eventEntry.past),
+    sanityClient.fetch(`
+      *[_type == "eventCategory" && isActive == true] | order(order asc) {
+        _id, name,
+        "slug": slug.current,
+        description, coverImage, color
+      }
+    `),
+  ]);
+
+// ── Fetch & flatten testimonials from completed events ─────────────────────────
+const testimonialRaw = await sanityClient.fetch(`
+  *[_type == "eventEntry" && isUpcoming != true && defined(testimonials) && count(testimonials) > 0]
+  | order(eventDate desc)[0...5] {
+    title,
+    "testimonials": testimonials[] { personName, role, image, quote }
+  }
+`);
+
+const testimonials = testimonialRaw
+  .flatMap((e: any) =>
+    (e.testimonials ?? []).map((t: any) => ({
+      ...t,
+      title: e.title,
+    })),
+  )
+  .slice(0, 8);
+
+// ── SEO ───────────────────────────────────────────────────────────────────────
+const pageTitle = eventsPageContent?.seo?.metaTitle || eventsPageContent?.heroTitle || 'Our Work';
+const pageDescription =
+  eventsPageContent?.seo?.metaDescription ||
+  'Explore the impactful work and events organised by NSS VIT — community service, health camps, awareness drives, and more.';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <EventsPage
+    client:load
+    upcomingEvents={upcomingEvents ?? []}
+    ongoingEvents={ongoingEvents ?? []}
+    pastEvents={pastEvents ?? []}
+    categories={categories ?? []}
+    testimonials={testimonials}
+    eventsPageContent={eventsPageContent ?? null}
+  />
+</BaseLayout>

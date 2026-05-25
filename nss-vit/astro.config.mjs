@@ -19,7 +19,23 @@ export default defineConfig({
   output: 'server', // Server mode for Sanity Studio, pages prerender by default
   adapter: vercel(),
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ['@sanity/astro'],
+      include: [
+        'sanity',
+        'sanity/structure',
+        '@sanity/vision',
+        '@sanity/color-input',
+        '@sanity/dashboard',
+        'sanity-plugin-media',
+        'sanity-plugin-dashboard-widget-document-list',
+        'styled-components',
+        'react',
+        'react-dom',
+        'react/jsx-runtime'
+      ]
+    }
   },
   prefetch: {
     prefetchAll: true, // Prefetch all links on hover

@@ -19,11 +19,13 @@ import aboutContent from './aboutContent';
 import navigation from './navigation';
 import footerContent from './footerContent';
 import contactInfo from './contactInfo';
+import eventsPage from './eventsPage';
 
 // Collection Schemas (Year-based content)
 import teamMember from './teamMember';
 import volunteerGroup from './volunteerGroup';
 import event from './event';
+import eventEntry from './eventEntry';
 import camp from './camp';
 import achievement from './achievement';
 import galleryImage from './galleryImage';
@@ -47,11 +49,13 @@ export const schemaTypes = [
   navigation,
   footerContent,
   contactInfo,
+  eventsPage,
 
   // Collections (Year-based)
   teamMember,
   volunteerGroup,
   event,
+  eventEntry,
   camp,
   achievement,
   galleryImage,
@@ -62,3 +66,4 @@ export const schemaTypes = [
   developer,
   contactSubmission,
 ];
+

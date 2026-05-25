@@ -520,10 +520,11 @@ async function seedSiteSettings() {
     mainNav: [
       { _key: 'nav-1', label: 'About', href: '/#about', order: 1, isExternal: false, isVisible: true },
       { _key: 'nav-2', label: 'Events', href: '/events', order: 2, isExternal: false, isVisible: true },
-      { _key: 'nav-3', label: 'Team', href: '/team', order: 3, isExternal: false, isVisible: true },
-      { _key: 'nav-4', label: 'Gallery', href: '/gallery', order: 4, isExternal: false, isVisible: true },
-      { _key: 'nav-5', label: 'Camp', href: '/camp', order: 5, isExternal: false, isVisible: true },
-      { _key: 'nav-6', label: 'Achievements', href: '/achievements', order: 6, isExternal: false, isVisible: true },
+      { _key: 'nav-2b', label: 'Our Work', href: '/our-work', order: 3, isExternal: false, isVisible: true },
+      { _key: 'nav-3', label: 'Team', href: '/team', order: 4, isExternal: false, isVisible: true },
+      { _key: 'nav-4', label: 'Gallery', href: '/gallery', order: 5, isExternal: false, isVisible: true },
+      { _key: 'nav-5', label: 'Camp', href: '/camp', order: 6, isExternal: false, isVisible: true },
+      { _key: 'nav-6', label: 'Achievements', href: '/achievements', order: 7, isExternal: false, isVisible: true },
     ],
     ctaButton: {
       label: 'Join NSS',
@@ -550,6 +551,7 @@ async function seedSiteSettings() {
     quickLinks: [
       { _key: 'link-1', label: 'About Us', href: '/#about' },
       { _key: 'link-2', label: 'Events', href: '/events' },
+      { _key: 'link-2b', label: 'Our Work', href: '/our-work' },
       { _key: 'link-3', label: 'Our Team', href: '/team' },
       { _key: 'link-4', label: 'Gallery', href: '/gallery' },
       { _key: 'link-5', label: 'Special Camp', href: '/camp' },
