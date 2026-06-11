@@ -327,6 +327,7 @@ export interface EventEntry extends SanityDocument {
   slug: { current: string };
   shortDescription: string;
   description: any[]; // Portable Text array
+  reportLink?: string;
   category: EventCategory;
   tags?: string[];
   coverImage: SanityImage;
@@ -589,6 +590,7 @@ export const queries = {
       _id, title,
       "slug": slug.current,
       shortDescription, description, coverImage,
+      reportLink,
       eventDate, featured, isCancelled,
       "status": select(isCancelled == true => "cancelled", "upcoming"),
       category->{ _id, name, "slug": slug.current, color },
@@ -605,6 +607,7 @@ export const queries = {
       _id, title,
       "slug": slug.current,
       shortDescription, description, coverImage,
+      reportLink,
       eventDate, featured, isCancelled,
       "status": select(isCancelled == true => "cancelled", "completed"),
       category->{ _id, name, "slug": slug.current, color },
@@ -617,6 +620,7 @@ export const queries = {
       _id, title,
       "slug": slug.current,
       shortDescription, description, coverImage,
+      reportLink,
       eventDate, featured, isCancelled,
       "status": select(
         isCancelled == true => "cancelled",
@@ -634,6 +638,7 @@ export const queries = {
       _id, title,
       "slug": slug.current,
       shortDescription, description, coverImage,
+      reportLink,
       eventDate, featured, isCancelled,
       "status": select(
         isCancelled == true => "cancelled",
@@ -650,6 +655,7 @@ export const queries = {
       _id, title,
       "slug": slug.current,
       shortDescription, coverImage,
+      reportLink,
       eventDate, featured, isCancelled,
       "status": select(
         isCancelled == true => "cancelled",

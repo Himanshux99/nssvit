@@ -67,6 +67,14 @@ export default defineType({
     }),
 
     defineField({
+      name: 'reportLink',
+      title: 'Report Link',
+      type: 'url',
+      group: 'content',
+      description: 'Link to event report (for past events)',
+    }),
+
+    defineField({
       name: 'category',
       title: 'Event Category',
       type: 'reference',
@@ -129,48 +137,7 @@ export default defineType({
       ],
     }),
 
-    // defineField({
-    //   name: 'gallery',
-    //   title: 'Gallery',
-    //   type: 'array',
-    //   group: 'media',
-    //   of: [
-    //     defineArrayMember({
-    //       type: 'object',
-    //       name: 'galleryImage',
-    //       fields: [
-    //         defineField({
-    //           name: 'image',
-    //           title: 'Image',
-    //           type: 'image',
-    //           options: { hotspot: true },
-    //           validation: (Rule) => Rule.required(),
-    //           fields: [
-    //             defineField({
-    //               name: 'alt',
-    //               title: 'Alt Text',
-    //               type: 'string',
-    //               description: 'Required for accessibility',
-    //               validation: (Rule) => Rule.required(),
-    //             }),
-    //           ],
-    //         }),
-    //         defineField({
-    //           name: 'caption',
-    //           title: 'Caption',
-    //           type: 'string',
-    //         }),
-    //       ],
-    //       preview: {
-    //         select: { media: 'image', title: 'caption' },
-    //         prepare({ media, title }) {
-    //           return { media, title: title || 'Gallery image' };
-    //         },
-    //       },
-    //     }),
-    //   ],
-    //   validation: (Rule) => Rule.max(40),
-    // }),
+   
 
     // Schedule
     defineField({

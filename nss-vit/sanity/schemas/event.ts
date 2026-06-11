@@ -13,7 +13,7 @@ export default defineType({
   name: 'event',
   title: 'Event',
   type: 'document',
-  icon: () => '📅',
+  icon: () => '➕',
   groups: [
     { name: 'basic', title: 'Basic Info', default: true },
     { name: 'details', title: 'Details' },
@@ -94,13 +94,6 @@ export default defineType({
       group: 'details',
       of: [{ type: 'block' }],
       description: 'Detailed event description (rich text)',
-    }),
-    defineField({
-      name: 'registrationLink',
-      title: 'Registration Link',
-      type: 'url',
-      group: 'details',
-      description: 'Link to registration form (for upcoming events)',
     }),
 
     // Media

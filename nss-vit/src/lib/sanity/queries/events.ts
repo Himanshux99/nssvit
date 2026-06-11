@@ -14,6 +14,7 @@ export const eventFields = `
   shortDescription,
   description,
   coverImage,
+  reportLink,
   eventDate,
   featured,
   isCancelled,

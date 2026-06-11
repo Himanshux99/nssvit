@@ -36,6 +36,7 @@ interface EventEntry {
   title: string;
   slug: string;
   shortDescription: string;
+  reportLink?: string;
   coverImage?: any;
   eventDate: string;
   isCancelled: boolean;
@@ -402,6 +403,24 @@ function PastEventRow({
                 </svg>
               </div>
             )}
+            {event.reportLink && (
+              <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm border border-indigo-100 flex items-center gap-1">
+                <svg
+                  className="w-3 h-3 text-indigo-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                <span className="text-[10px] font-semibold text-indigo-600">Report</span>
+              </div>
+            )}
           </div>
 
           <div className="p-4">
@@ -562,6 +581,26 @@ function PastEventRow({
             <div className="text-[10px] text-swiss-gray-500 font-medium">
               Volunteers
             </div>
+          </div>
+        )}
+
+        {/* Report badge */}
+        {event.reportLink && (
+          <div className="flex-shrink-0 self-center bg-indigo-50 border border-indigo-200 rounded-full px-2.5 py-1 flex items-center gap-1.5 transition-colors group-hover:bg-indigo-100 group-hover:border-indigo-300">
+            <svg
+              className="w-3.5 h-3.5 text-indigo-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span className="text-[10px] font-semibold text-indigo-600 whitespace-nowrap">Report</span>
           </div>
         )}
       </motion.div>
