@@ -6,6 +6,7 @@ interface CalendarEvent {
   title: string;
   eventDate: string;
   status: CalendarEventStatus;
+  reportLink?: string;
 }
 
 interface EventCalendarProps {
@@ -67,7 +68,7 @@ export default function EventCalendar({
 
   const eventsByDate = new Map<
     string,
-    { title: string; status: CalendarEventStatus }[]
+    { title: string; status: CalendarEventStatus; reportLink?: string }[]
   >();
 
   allUpcoming.forEach((e) => {
@@ -75,7 +76,7 @@ export default function EventCalendar({
     if (!isNaN(d.getTime())) {
       const key = toKey(d);
       const list = eventsByDate.get(key) || [];
-      list.push({ title: e.title, status: e.status });
+      list.push({ title: e.title, status: e.status, reportLink: e.reportLink });
       eventsByDate.set(key, list);
     }
   });
@@ -85,7 +86,7 @@ export default function EventCalendar({
     if (!isNaN(d.getTime())) {
       const key = toKey(d);
       const list = eventsByDate.get(key) || [];
-      list.push({ title: e.title, status: e.status });
+      list.push({ title: e.title, status: e.status, reportLink: e.reportLink });
       eventsByDate.set(key, list);
     }
   });
@@ -152,22 +153,22 @@ export default function EventCalendar({
                 <div className="text-xs font-semibold">{date.getDate()}</div>
 
                 {dayEvents.length > 0 && (
-                  <div className="absolute z-20 top-12 left-1/2 -translate-x-1/2 mt-2 w-48 bg-white border border-swiss-gray-200 shadow-lg rounded-sm p-2 text-[11px] text-swiss-gray-600 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                    <div className="font-semibold text-text mb-1">
+                  <div className="absolute z-20 top-12 left-1/2 -translate-x-1/2 mt-2 w-56 bg-white border border-swiss-gray-200 shadow-lg rounded-sm p-2.5 text-[11px] text-swiss-gray-600 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                    <div className="font-semibold text-text mb-1.5">
                       {date.toLocaleDateString("en-IN", {
                         day: "numeric",
                         month: "short",
                         year: "numeric",
                       })}
                     </div>
-                    <ul className="space-y-1">
+                    <ul className="space-y-1.5">
                       {dayEvents.slice(0, 3).map((e, i) => (
                         <li
                           key={`${key}-e-${i}`}
                           className="flex items-start gap-2"
                         >
                           <span
-                            className={`mt-1 w-2 h-2 rounded-sm ${
+                            className={`mt-1 w-2 h-2 flex-shrink-0 rounded-sm ${
                               e.status === "upcoming"
                                 ? "bg-emerald-500"
                                 : e.status === "cancelled"
@@ -175,7 +176,46 @@ export default function EventCalendar({
                                   : "bg-blue-500"
                             }`}
                           />
-                          <span className="line-clamp-2">{e.title}</span>
+                          <div className="flex-1 min-w-0">
+                            <span className="line-clamp-2">{e.title}</span>
+                            {e.reportLink && (
+                              <a
+                                href={e.reportLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(ev) => ev.stopPropagation()}
+                                className="inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-sm hover:bg-indigo-100 hover:border-indigo-300 transition-colors cursor-pointer"
+                              >
+                                <svg
+                                  className="w-2.5 h-2.5"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth={2.5}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                  />
+                                </svg>
+                                View Report
+                                <svg
+                                  className="w-2 h-2"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth={2.5}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                  />
+                                </svg>
+                              </a>
+                            )}
+                          </div>
                         </li>
                       ))}
                       {dayEvents.length > 3 && (
@@ -193,4 +233,4 @@ export default function EventCalendar({
       </aside>
     </div>
   );
-}
+}
