@@ -621,7 +621,7 @@ export const queries = {
     }`,
 
     /** Upcoming: isUpcoming == true */
-    upcoming: `*[_type == "eventEntry" && isUpcoming == true] | order(eventDate asc) {
+    upcoming: `*[_type == "eventEntry" && isUpcoming == true] | order(eventDate desc) {
       _id, title,
       "slug": slug.current,
       shortDescription, description, coverImage,
